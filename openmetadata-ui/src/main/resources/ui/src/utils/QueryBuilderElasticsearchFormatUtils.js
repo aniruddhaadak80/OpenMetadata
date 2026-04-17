@@ -821,7 +821,7 @@ function buildEsRule(fieldName, value, operator, config, valueSrc) {
     return buildExtensionQuery(
       extensionPropertyName,
       entityType,
-      hasValue ? value[0] : null,
+      hasValue ? value : null,
       op,
       not,
       omPropertyType
