@@ -43,6 +43,10 @@ public class IndexResource {
   }
 
   public void initialize(OpenMetadataApplicationConfig config) {
+    if (this.indexHtml == null) {
+      LOG.warn("index.html was not loaded; skipping base path replacement");
+      return;
+    }
     this.indexHtml = this.indexHtml.replace("${basePath}", config.getBasePath());
   }
 
