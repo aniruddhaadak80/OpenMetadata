@@ -75,18 +75,30 @@ public class SearchIndexClusterValidator {
   private ClusterCapacity getOpenSearchCapacity(OpenSearchClient client) {
     try {
       var clusterStats = client.clusterStats();
+      boolean hasNodeCount =
+          clusterStats != null && clusterStats.nodes() != null && clusterStats.nodes().count() != null;
 
-      int totalNodes = clusterStats.nodes().count().total();
+      int totalNodes = hasNodeCount ? clusterStats.nodes().count().total() : 1;
       int totalShards =
-          clusterStats.indices().shards().total() != null
+          clusterStats != null
+                  && clusterStats.indices() != null
+                  && clusterStats.indices().shards() != null
+                  && clusterStats.indices().shards().total() != null
               ? clusterStats.indices().shards().total().intValue()
               : 0;
 
-      int maxShardsPerNode = getMaxShardsPerNode(client);
+      int maxShardsPerNode =
+          hasNodeCount ? getMaxShardsPerNode(client) : DEFAULT_MAX_SHARDS_PER_NODE;
       int maxShards = totalNodes * maxShardsPerNode;
 
       double usagePercent = maxShards > 0 ? (double) totalShards / maxShards : 0;
       int availableShards = maxShards - totalShards;
+
+      if (!hasNodeCount) {
+        LOG.debug(
+            "OpenSearch cluster stats did not include node count; skipping cluster settings lookup and using default max shards per node {}",
+            DEFAULT_MAX_SHARDS_PER_NODE);
+      }
 
       LOG.debug(
           "OpenSearch cluster capacity: {} current shards, {} max shards ({} nodes x {} per node), {:.1f}% used",
