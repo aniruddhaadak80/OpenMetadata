@@ -91,6 +91,7 @@ public class OpenSearchClient implements SearchClient {
   private volatile boolean isNewClientAvailable;
   private final OpenSearchTransport transport;
   private final SdkHttpClient awsHttpClient; // Stored for cleanup on close()
+  @Getter private final boolean aoss;
 
   private volatile OSLineageGraphBuilder lineageGraphBuilder;
   private final OSEntityRelationshipGraphBuilder entityRelationshipGraphBuilder;
@@ -112,6 +113,10 @@ public class OpenSearchClient implements SearchClient {
   public OpenSearchClient(ElasticSearchConfiguration config, NLQService nlqService) {
     AwsConfiguration awsConfig = config != null ? config.getAws() : null;
     boolean useIamAuth = isAwsIamAuthEnabled(awsConfig);
+    this.aoss =
+        awsConfig != null
+            && StringUtils.isNotBlank(awsConfig.getServiceName())
+            && "aoss".equalsIgnoreCase(awsConfig.getServiceName());
 
     if (useIamAuth) {
       this.awsHttpClient = AwsCrtHttpClient.builder().build();

@@ -87,8 +87,9 @@ public class SearchIndexClusterValidator {
               ? clusterStats.indices().shards().total().intValue()
               : 0;
 
+      boolean canReadClusterSettings = hasNodeCount && !client.isAoss();
       int maxShardsPerNode =
-          hasNodeCount ? getMaxShardsPerNode(client) : DEFAULT_MAX_SHARDS_PER_NODE;
+          canReadClusterSettings ? getMaxShardsPerNode(client) : DEFAULT_MAX_SHARDS_PER_NODE;
       int maxShards = totalNodes * maxShardsPerNode;
 
       double usagePercent = maxShards > 0 ? (double) totalShards / maxShards : 0;
@@ -97,6 +98,10 @@ public class SearchIndexClusterValidator {
       if (!hasNodeCount) {
         LOG.debug(
             "OpenSearch cluster stats did not include node count; skipping cluster settings lookup and using default max shards per node {}",
+            DEFAULT_MAX_SHARDS_PER_NODE);
+      } else if (client.isAoss()) {
+        LOG.debug(
+            "OpenSearch client is configured for AWS OpenSearch Serverless (AOSS); using default max shards per node {}",
             DEFAULT_MAX_SHARDS_PER_NODE);
       }
 
