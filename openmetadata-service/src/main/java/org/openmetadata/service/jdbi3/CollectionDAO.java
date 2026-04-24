@@ -8443,7 +8443,7 @@ public interface CollectionDAO {
         psqlCondition.append("AND entityType=:entityType ");
       }
 
-            if (supportedDataType != null) {
+      if (supportedDataType != null) {
         filter.queryParams.put("supportedDataTypeLike", String.format("%%%s%%", supportedDataType));
         mysqlCondition.append(
             "AND (json_extract(json, '$.supportedDataTypes') = JSON_ARRAY() "
@@ -8517,7 +8517,7 @@ public interface CollectionDAO {
         psqlCondition.append("AND entityType = :entityType ");
       }
 
-            if (supportedDataType != null) {
+      if (supportedDataType != null) {
         filter.queryParams.put("supportedDataTypeLike", String.format("%%%s%%", supportedDataType));
         mysqlCondition.append(
             "AND (json_extract(json, '$.supportedDataTypes') = JSON_ARRAY() "
@@ -8591,7 +8591,7 @@ public interface CollectionDAO {
         psqlCondition.append("AND entityType=:entityType ");
       }
 
-            if (supportedDataType != null) {
+      if (supportedDataType != null) {
         filter.queryParams.put("supportedDataTypeLike", String.format("%%%s%%", supportedDataType));
         mysqlCondition.append(
             "AND (json_extract(json, '$.supportedDataTypes') = JSON_ARRAY() "
