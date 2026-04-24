@@ -8443,11 +8443,16 @@ public interface CollectionDAO {
         psqlCondition.append("AND entityType=:entityType ");
       }
 
-      if (supportedDataType != null) {
+            if (supportedDataType != null) {
         filter.queryParams.put("supportedDataTypeLike", String.format("%%%s%%", supportedDataType));
         mysqlCondition.append(
-            "AND json_extract(json, '$.supportedDataTypes') LIKE :supportedDataTypeLike ");
-        psqlCondition.append("AND json->>'supportedDataTypes' LIKE :supportedDataTypeLike ");
+            "AND (json_extract(json, '$.supportedDataTypes') = JSON_ARRAY() "
+                + "OR json_extract(json, '$.supportedDataTypes') IS NULL "
+                + "OR json_extract(json, '$.supportedDataTypes') LIKE :supportedDataTypeLike) ");
+        psqlCondition.append(
+            "AND (json->>'supportedDataTypes' = '[]' "
+                + "OR json->>'supportedDataTypes' IS NULL "
+                + "OR json->>'supportedDataTypes' LIKE :supportedDataTypeLike) ");
       }
 
       if (supportedService != null) {
@@ -8512,11 +8517,16 @@ public interface CollectionDAO {
         psqlCondition.append("AND entityType = :entityType ");
       }
 
-      if (supportedDataType != null) {
+            if (supportedDataType != null) {
         filter.queryParams.put("supportedDataTypeLike", String.format("%%%s%%", supportedDataType));
         mysqlCondition.append(
-            "AND json_extract(json, '$.supportedDataTypes') LIKE :supportedDataTypeLike ");
-        psqlCondition.append("AND json->>'supportedDataTypes' LIKE :supportedDataTypeLike ");
+            "AND (json_extract(json, '$.supportedDataTypes') = JSON_ARRAY() "
+                + "OR json_extract(json, '$.supportedDataTypes') IS NULL "
+                + "OR json_extract(json, '$.supportedDataTypes') LIKE :supportedDataTypeLike) ");
+        psqlCondition.append(
+            "AND (json->>'supportedDataTypes' = '[]' "
+                + "OR json->>'supportedDataTypes' IS NULL "
+                + "OR json->>'supportedDataTypes' LIKE :supportedDataTypeLike) ");
       }
 
       if (supportedService != null) {
@@ -8581,11 +8591,16 @@ public interface CollectionDAO {
         psqlCondition.append("AND entityType=:entityType ");
       }
 
-      if (supportedDataType != null) {
+            if (supportedDataType != null) {
         filter.queryParams.put("supportedDataTypeLike", String.format("%%%s%%", supportedDataType));
         mysqlCondition.append(
-            "AND json_extract(json, '$.supportedDataTypes') LIKE :supportedDataTypeLike ");
-        psqlCondition.append("AND json->>'supportedDataTypes' LIKE :supportedDataTypeLike ");
+            "AND (json_extract(json, '$.supportedDataTypes') = JSON_ARRAY() "
+                + "OR json_extract(json, '$.supportedDataTypes') IS NULL "
+                + "OR json_extract(json, '$.supportedDataTypes') LIKE :supportedDataTypeLike) ");
+        psqlCondition.append(
+            "AND (json->>'supportedDataTypes' = '[]' "
+                + "OR json->>'supportedDataTypes' IS NULL "
+                + "OR json->>'supportedDataTypes' LIKE :supportedDataTypeLike) ");
       }
 
       if (supportedService != null) {
